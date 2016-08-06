@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block scripts %}
+{{ super() }}
+{% endblock %}
+
+{% block title %}Fuzzy Flask{% endblock %}
+
+{% block page_content %}
+  <div>
+    <form class="form" role="form" ng-submit="app.sendData()">
+      {# Create form by hand as opposed to using wtf.quick_form() #}
+      {# this allows sending in parameters to #}
+      {# source: https://pythonhosted.org/Flask-Bootstrap/forms.html #}
+      {{ data_form.csrf_token }}
+      {{ wtf.form_field(data_form.name, ng_model="form.name", placeholder="Enter your name...") }}
+      {{ wtf.form_field(data_form.location, ng_model="form.location", placeholder="Enter your location...") }}
+      {{ wtf.form_field(data_form.submit) }}
+    </form>
+    {# use ng-clock and css file to avoid flicker effect #}
+    {# source: https://docs.angularjs.org/api/ng/directive/ngCloak #}
+    <h1 class="ng-cloak">{a helloStatement a}</h1>
+  </div>
+{% endblock %}
+

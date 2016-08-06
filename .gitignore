@@ -1,0 +1,11 @@
+# standard python items
+*.pyc
+__pycache__/
+
+# standard pycharm items
+.idea/
+.pycharmrc
+
+# ignore contents of bower_components
+app/static/bower_components/
+

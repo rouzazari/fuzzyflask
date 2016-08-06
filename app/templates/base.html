@@ -1,0 +1,27 @@
+{% extends "bootstrap/base.html" %}
+
+{% block scripts %}
+{{ super() }}
+{% endblock %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+{% endblock %}
+
+{# Flask-Bootstrap allows adding attributes to <body> by using body_attribs block.
+  Use this to add ng-app and ng-controller directly to the template.
+  source: https://pythonhosted.org/Flask-Bootstrap/basic-usage.html#available-blocks #}
+{% block body_attribs %} ng-app="app" ng-controller="AppCtrl as app"{% endblock %}
+
+{% block title %}Fuzzy Flask{% endblock %}
+
+{% block navbar %}{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% block page_content %}{% endblock %}
+</div>
+  <script src="{{  url_for('static', filename='bower_components/angular/angular.js') }}"></script>
+  <script src="{{  url_for('static', filename='js/app.js') }}"></script>
+{% endblock %}

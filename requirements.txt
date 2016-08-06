@@ -4,3 +4,5 @@ Flask-Migrate==2.0.0
 Flask-Script==2.0.5
 Flask-SQLAlchemy==2.1
 Flask-WTF==0.12
+fuzzywuzzy==0.11.1
+pandas==0.18.1

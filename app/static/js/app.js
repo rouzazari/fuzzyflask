@@ -22,7 +22,8 @@ app.controller("AppCtrl", ['$scope', '$http', '$httpParamSerializerJQLike', func
       data    : $httpParamSerializerJQLike($scope.form),
       headers : {'Content-Type': 'application/x-www-form-urlencoded'}
       }).success(function (data) {
-        $scope.helloStatement = data.name + ' is from ' + data.location;
+        // TODO: Hide input area after clicking
+        $scope.dataframe = data;
     });
 
 

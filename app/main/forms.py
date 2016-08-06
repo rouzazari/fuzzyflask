@@ -1,8 +1,8 @@
 from flask_wtf import Form
 
-from wtforms import StringField, SubmitField
+from wtforms import SubmitField, TextAreaField
 from wtforms.validators import DataRequired
-from wtforms.widgets import TextInput
+from wtforms.widgets import TextArea
 
 
 def get_angularjs_class(base_class):
@@ -27,12 +27,12 @@ def get_angularjs_class(base_class):
 
 class DataForm(Form):
     """
-    Input field for test {widget=AngularJSClass(TextInput}.
+    Input field for dataset {widget=AngularJSTextInput}.
     """
-    name = StringField('What is your name?',
-                       validators=[DataRequired()],
-                       widget=get_angularjs_class(TextInput)())
-    location = StringField('What is your location?',
-                           validators=[DataRequired()],
-                           widget=get_angularjs_class(TextInput)())
+    dataset = TextAreaField('Dataset:',
+                            validators=[DataRequired()],
+                            widget=get_angularjs_class(TextArea)())
+    dictionary = TextAreaField('Dictionary:',
+                               validators=[DataRequired()],
+                               widget=get_angularjs_class(TextArea)())
     submit = SubmitField('Submit')

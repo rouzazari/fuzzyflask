@@ -5,6 +5,18 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY')
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
+    CELERY_MAIN = 'tasks'
+    BROKER_DETAILS = dict(user=os.environ.get('CELERY_BROKER_USERNAME'),
+                          password=os.environ.get('CELERY_BROKER_PASSWORD'),
+                          server=os.environ.get('CELERY_BROKER_SERVER'),
+                          port=os.environ.get('CELERY_BROKER_PORT'),
+                          vhost=os.environ.get('CELERY_BROKER_VHOST'))
+    CELERY_BROKER_URL = 'amqp://{user}:{password}@{server}:{port}/{vhost}'.format(**BROKER_DETAILS)
+    CELERY_RESULT_BACKEND = 'rpc://'
+    CELERY_TASK_SERIALIZER = 'json'
+    CELERY_RESULT_SERIALIZER = 'json'
+    CELERY_ACCEPT_CONTENT = ['json']
+    CELERY_TIMEZONE = 'US/Pacific'
 
     @staticmethod
     def init_app(app):

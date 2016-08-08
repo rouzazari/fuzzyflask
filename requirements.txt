@@ -1,3 +1,4 @@
+celery==3.1.23
 Flask==0.11.1
 Flask-Bootstrap==3.3.6.0
 Flask-Migrate==2.0.0
@@ -6,3 +7,4 @@ Flask-SQLAlchemy==2.1
 Flask-WTF==0.12
 fuzzywuzzy==0.11.1
 pandas==0.18.1
+python-Levenshtein==0.12.0

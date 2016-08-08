@@ -23,7 +23,6 @@ def dictionary_match(item, dictionary,
     if item in dictionary:
         return item, 100
     matched_item, score = process.extractOne(item, dictionary)
-    print("{} => {}".format(item, matched_item))
     if score < low_match_threshold and not allow_low_match:
         return item, score
     else:

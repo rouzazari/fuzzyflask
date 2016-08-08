@@ -18,11 +18,13 @@ app.controller("AppCtrl", ['$scope', '$http', '$httpParamSerializerJQLike', func
     // simple function that prints "Hello, <name>!" to helloStatement
     $http({
       method  : 'POST',
-      url     : '/match',
+      url     : '/match_async',
       data    : $httpParamSerializerJQLike($scope.form),
       headers : {'Content-Type': 'application/x-www-form-urlencoded'}
-      }).success(function (data) {
+      }).success(function (data, status, headers) {
         // TODO: Hide input area after clicking
+        var status_url = headers('Location');
+        $scope.status_url = status_url;
         $scope.dataframe = data;
     });
 

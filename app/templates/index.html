@@ -9,8 +9,8 @@
 
 {% block page_content %}
   <div>
-    {# TODO: Make textboxes into two columns, not two big rows #}
-    <form class="form-horizontal" role="form" ng-submit="app.sendData()">
+    {# Animation via ngAnimate + angular-ui/bootstrap,  https://github.com/angular-ui/bootstrap/tree/master/src/collapse #}
+    <form class="form-horizontal" role="form" ng-submit="app.sendData()" uib-collapse="isFormCollapsed">
       {# Create form by hand as opposed to using wtf.quick_form() #}
       {# this allows sending in parameters to #}
       {# source: https://pythonhosted.org/Flask-Bootstrap/forms.html #}
@@ -18,23 +18,30 @@
       <div class="form-group">
         <div class="form-group row">
           <div class="col-md-4 col-md-offset-1">
-            {{ wtf.form_field(data_form.dataset, extra_classes="abc", ng_model="form.dataset", placeholder="Paste single-column data here...", rows="10") }}
+            {{ wtf.form_field(data_form.dataset, ng_model="form.dataset", placeholder="Paste single-column data here...", rows="10") }}
           </div>
           <div class="col-md-4 col-md-offset-1">
             {{ wtf.form_field(data_form.dictionary, ng_model="form.dictionary", placeholder="Paste dictionary here...", rows="10") }}
           </div>
         </div>
       </div>
-      {{ wtf.form_field(data_form.submit) }}
+      <div class="col-md-11 col-centered">
+        {{ wtf.form_field(data_form.submit) }}
+      </div>
     </form>
+    {# button only shows when form hidden #}
+    <div class="ng-cloak col-centered" ng-show="isFormCollapsed">
+      <button type="button" class="btn btn-default ng-cloak" ng-click="isFormCollapsed = !isFormCollapsed">Show search form</button>
+    </div>
     {# use ng-cloak and css file to avoid flicker effect #}
     {# source: https://docs.angularjs.org/api/ng/directive/ngCloak #}
     <div class="ng-cloak" ng-show="isRunning">
+      {# TODO: upgrade to progress bar https://github.com/angular-ui/bootstrap/tree/master/src/progressbar #}
       <div>{a status_text a}</div>
       <button class="btn btn-default" ng-click="app.stopMatch()">Stop <i class="fa fa-hand-paper-o" aria-hidden="true"></i></button>
     </div>
-
-    {# TODO: Make Save button do something #}
+    {# using ng-csv to export file: https://github.com/asafdav/ng-csv #}
+    {# TODO: add column headers #}
     <div id="save-btn" class="ng-cloak" ng-show="dataframe.length">
       <button class="btn btn-default"  ng-csv="dataframe" filename="test.csv">Save to CSV <i class="fa fa-file-excel-o"></i></button>
     </div>
@@ -54,11 +61,12 @@
         <td ng-switch="row.isEditing">
           <span ng-switch-default>{a row.match a}</span>
           <div ng-switch-when="true">
-            <select ng-model="row.match" ng-options="o as o for o in dictionary" required></select>
+            <select ng-model="row.match" ng-options="o as o for o in dictionary" required class="btn"></select>
           </div>
         </td>
         <td><span>{a row.score a}</span></td>
         <td><input type="checkbox" ng-model="row.selected"></td>
+        {# TODO: research if dropdown works: https://github.com/angular-ui/bootstrap/tree/master/src/dropdown#}
         <td>
           <button class="btn btn-primary btn-sm" ng-click="app.save(row, rowForm)" ng-if="row.isEditing"><span class="glyphicon glyphicon-ok"></span></button>
           <button class="btn btn-default btn-sm" ng-click="row.isEditing = true" ng-if="!row.isEditing"><span class="glyphicon glyphicon-pencil"></span></button>

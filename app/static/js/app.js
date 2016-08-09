@@ -1,4 +1,4 @@
-var app = angular.module("app", ['ngSanitize', 'ngCsv']);
+var app = angular.module("app", ['ngSanitize', 'ngCsv', 'ngAnimate', 'ui.bootstrap']);
 
 app.config(['$interpolateProvider', function ($interpolateProvider) {
   // change the delimiter for AngularJS to avoid conflicts with Jinja2
@@ -15,6 +15,7 @@ app.controller("AppCtrl", ['$scope', '$http', '$httpParamSerializerJQLike', '$ti
     // source: https://docs.angularjs.org/api/ng/service/$httpParamSerializerJQLike
     var app = this;
     $scope.isRunning = false;
+    $scope.isFormCollapsed = false;
 
     app.sendData = function () {
       // save dictionary to variables
@@ -29,6 +30,7 @@ app.controller("AppCtrl", ['$scope', '$http', '$httpParamSerializerJQLike', '$ti
       }).success(function (data, status, headers) {
         // TODO: Hide input area after clicking, add button show input area again
         $scope.isRunning = true;
+        $scope.isFormCollapsed = true;
         var status_url = headers('Location');
         $scope.taskID = headers('TaskID');
         $scope.status_text = 'Loading...';
@@ -61,7 +63,7 @@ app.controller("AppCtrl", ['$scope', '$http', '$httpParamSerializerJQLike', '$ti
         method: 'GET',
         url: '/match_kill/' + $scope.taskID
       }).success(function (data) {
-        alert('Stopped!');
+
       });
     };
 
@@ -78,3 +80,4 @@ app.controller("AppCtrl", ['$scope', '$http', '$httpParamSerializerJQLike', '$ti
 
 
   }]);
+

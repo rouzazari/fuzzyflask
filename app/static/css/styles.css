@@ -27,6 +27,10 @@ table tr:nth-child(even) {
     text-align: right;
 }
 
+.col-centered {
+    text-align: center;
+}
+
 /* footer placement. css adapted from:
    http://stackoverflow.com/questions/8824831/make-div-stay-at-bottom-of-pages-content-all-the-time-even-when-there-are-scrol/8825714#8825714
 */

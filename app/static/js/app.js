@@ -53,13 +53,13 @@ app.controller("AppCtrl", ['$scope', '$http', '$httpParamSerializerJQLike', '$ti
       });
     };
 
+    // TODO: set row state (pristine/dirty) and tracking (track/untrack)
     app.resetRow = function (row, rowForm) {
       row.isEditing = false;
     };
 
     app.save = function (row, rowForm) {
-      var originalRow = app.resetRow(row, rowForm);
-      angular.extend(originalRow, row);
+      app.resetRow(row, rowForm);
     };
 
 

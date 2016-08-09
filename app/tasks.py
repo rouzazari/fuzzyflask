@@ -20,8 +20,8 @@ def match_task(self, dataset, dictionary):
     d_all = []
     # iterate through rows and update task state for polling
     for i, row in enumerate(data_split):
-        match, score = dictionary_match(row, dict_split)
-        d = dict(data=row, match=match, score=score)
+        match, score = dictionary_match(row, dict_split, allow_low_match=True)
+        d = dict(data=row, match=match, score=score, selected=score>90)
         d_all.append(d)
         if not message or random.random() < REFRESH_THRESHOLD:
             message = d_all

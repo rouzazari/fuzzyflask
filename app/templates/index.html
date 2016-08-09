@@ -21,13 +21,34 @@
     </form>
     {# use ng-cloak and css file to avoid flicker effect #}
     {# source: https://docs.angularjs.org/api/ng/directive/ngCloak #}
-    <div class="ng-cloak"><a href="{a status_url a}" target="_">{a status_url a}</a></div>
     <div class="ng-cloak">{a status_text a}</div>
-    <table class="ng-cloak">
-      <tr ng-repeat="row in dataframe">
-        <td>{a row.data a}</td>
-        <td>{a row.match a}</td>
-        <td>{a row.score a}</td>
+    {# TODO: Make Save button do something #}
+    <div ng-show="dataframe.length"><button class="btn btn-default">Save</button></div>
+    <table class="ng-cloak" ng-show="dataframe.length">
+      <thead>
+        <tr>
+          <th>Input</th>
+          <th>Match</th>
+          <th>Score</th>
+          <th>Accept?</th>
+        </tr>
+      </thead>
+      {# Partialy adapted from http://ng-table.com/#/editing/demo-inline #}
+      <tr ng-repeat="row in dataframe" ng-form="rowForm">
+        <td><span>{a row.data a}</span></td>
+        <td ng-switch="row.isEditing">
+          <span ng-switch-default>{a row.match a}</span>
+          <div ng-switch-when="true">
+            <select ng-model="row.match" ng-options="o as o for o in dictionary" required></select>
+          </div>
+        </td>
+        <td><span>{a row.score a}</span></td>
+        <td><input type="checkbox" ng-model="row.selected"></td>
+        <td>
+          {# TODO: Change ng-click for save button #}
+          <button class="btn btn-primary btn-sm" ng-click="app.save(row, rowForm)" ng-if="row.isEditing"><span class="glyphicon glyphicon-ok"></span></button>
+          <button class="btn btn-default btn-sm" ng-click="row.isEditing = true" ng-if="!row.isEditing"><span class="glyphicon glyphicon-pencil"></span></button>
+        </td>
       </tr>
     </table>
   </div>

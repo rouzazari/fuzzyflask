@@ -17,16 +17,6 @@ def index():
     return render_template('index.html', data_form=data_form)
 
 
-@main.route('/match', methods=['POST'])
-def match():
-    # TODO: make return asynchronous (takes too long)
-    # TODO: add a status feature (show % or number done)
-    # TODO: display table, then show results as calculated (asynchronously)
-    form_data = request.form['dataset']
-    form_dictionary = request.form['dictionary']
-    return process_dataset(form_data, form_dictionary)
-
-
 @main.route('/match_async', methods=['POST'])
 def match_async():
     form_data = request.form['dataset']
@@ -53,7 +43,8 @@ def match_status(task_id):
             'state': task.state,
             'current': task.info.get('current', 0),
             'total': task.info.get('total', 1),
-            'status': task.info.get('status', '')
+            'status': ''
+            # 'status': task.info.get('status', '') # disabled mid-processing results
         }
         if 'result' in task.info:
             # sort results by score then name, descending

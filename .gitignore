@@ -9,3 +9,6 @@ __pycache__/
 # ignore contents of bower_components
 app/static/bower_components/
 
+# ignore server scripts
+runcelery.sh
+webserver.sh

@@ -56,7 +56,10 @@ def match_status(task_id):
             'status': task.info.get('status', '')
         }
         if 'result' in task.info:
-            response['result'] = task.info['result']
+            # sort results by score then name, descending
+            # (using negative for score to achieve this)
+            response['result'] = sorted(task.info['result'],
+                                        key=lambda k: (-k['score'], k['data']))
     else:
         response = {
             'state': task.state,

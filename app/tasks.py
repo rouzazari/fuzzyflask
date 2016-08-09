@@ -29,5 +29,5 @@ def match_task(self, dataset, dictionary):
                           meta={'current': int(i+1),
                                 'total': total,
                                 'status': message})
-    return {'current': total, 'total': total, 'status': message,
+    return {'current': total, 'total': total, 'status': 'COMPLETE',
             'result': message}

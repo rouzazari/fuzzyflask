@@ -53,15 +53,16 @@ app.controller("AppCtrl", ['$scope', '$http', '$httpParamSerializerJQLike', '$ti
       });
     };
 
-    // TODO: set row state (pristine/dirty) and tracking (track/untrack)
+    // Partially adapted from http://ng-table.com/#/editing/demo-inline
+    // TODO: allow undo of edit via cancel button
     app.resetRow = function (row, rowForm) {
       row.isEditing = false;
+      rowForm.$setPristine();
     };
 
     app.save = function (row, rowForm) {
       app.resetRow(row, rowForm);
     };
-
 
 
   }]);

@@ -10,20 +10,28 @@
 {% block page_content %}
   <div>
     {# TODO: Make textboxes into two columns, not two big rows #}
-    <form class="form" role="form" ng-submit="app.sendData()">
+    <form class="form-horizontal" role="form" ng-submit="app.sendData()">
       {# Create form by hand as opposed to using wtf.quick_form() #}
       {# this allows sending in parameters to #}
       {# source: https://pythonhosted.org/Flask-Bootstrap/forms.html #}
       {{ data_form.csrf_token }}
-      {{ wtf.form_field(data_form.dataset, ng_model="form.dataset", placeholder="Paste single-column data here...", rows="10") }}
-      {{ wtf.form_field(data_form.dataset, ng_model="form.dictionary", placeholder="Paste dictionary here...", rows="10") }}
+      <div class="form-group">
+        <div class="form-group row">
+          <div class="col-md-4 col-md-offset-1">
+            {{ wtf.form_field(data_form.dataset, extra_classes="abc", ng_model="form.dataset", placeholder="Paste single-column data here...", rows="10") }}
+          </div>
+          <div class="col-md-4 col-md-offset-1">
+            {{ wtf.form_field(data_form.dictionary, ng_model="form.dictionary", placeholder="Paste dictionary here...", rows="10") }}
+          </div>
+        </div>
+      </div>
       {{ wtf.form_field(data_form.submit) }}
     </form>
     {# use ng-cloak and css file to avoid flicker effect #}
     {# source: https://docs.angularjs.org/api/ng/directive/ngCloak #}
     <div class="ng-cloak">{a status_text a}</div>
     {# TODO: Make Save button do something #}
-    <div ng-show="dataframe.length"><button class="btn btn-default">Save</button></div>
+    <div class="ng-cloak" ng-show="dataframe.length"><button class="btn btn-default">Save</button></div>
     <table class="ng-cloak" ng-show="dataframe.length">
       <thead>
         <tr>
@@ -34,7 +42,7 @@
           <th>Edit</th>
         </tr>
       </thead>
-      {# Partialy adapted from http://ng-table.com/#/editing/demo-inline #}
+      {# Partially adapted from http://ng-table.com/#/editing/demo-inline #}
       <tr ng-repeat="row in dataframe" ng-form="rowForm">
         <td><span>{a row.data a}</span></td>
         <td ng-switch="row.isEditing">
@@ -46,7 +54,6 @@
         <td><span>{a row.score a}</span></td>
         <td><input type="checkbox" ng-model="row.selected"></td>
         <td>
-          {# TODO: Change ng-click for save button #}
           <button class="btn btn-primary btn-sm" ng-click="app.save(row, rowForm)" ng-if="row.isEditing"><span class="glyphicon glyphicon-ok"></span></button>
           <button class="btn btn-default btn-sm" ng-click="row.isEditing = true" ng-if="!row.isEditing"><span class="glyphicon glyphicon-pencil"></span></button>
         </td>

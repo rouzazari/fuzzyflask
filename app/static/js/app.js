@@ -14,6 +14,7 @@ app.controller("AppCtrl", ['$scope', '$http', '$httpParamSerializerJQLike', '$ti
     // use $httpParamSerializerJQLike to make params for POST
     // source: https://docs.angularjs.org/api/ng/service/$httpParamSerializerJQLike
     var app = this;
+    $scope.isRunning = false;
 
     app.sendData = function () {
       // save dictionary to variables
@@ -27,29 +28,40 @@ app.controller("AppCtrl", ['$scope', '$http', '$httpParamSerializerJQLike', '$ti
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       }).success(function (data, status, headers) {
         // TODO: Hide input area after clicking, add button show input area again
-        // TODO: Make this less imperative and more declarative (AngularJS),
-        // TODO: consider using ng-table
+        $scope.isRunning = true;
         var status_url = headers('Location');
+        $scope.taskID = headers('TaskID');
         $scope.status_text = 'Loading...';
         $scope.dataframe = []; // reset dataframe
+        console.log(status_url);
         (function tick() {
           $scope.data = $http({
             method: 'GET',
             url: status_url
           }).success(function (data) {
-            if (data.state != "SUCCESS") {
-              console.log("Still working...");
+            if (data.state == "REVOKED") {
+              $scope.status_text = 'Process stopped.';
+              $scope.isRunning = false;
+            } else if (data.state != "SUCCESS") {
               $scope.status_text = 'Loading... ' + data.current + ' of ' + data.total;
               //$scope.dataframe = data.status; // disabled mid-processing results
               $timeout(tick, 1000);
             } else {
-              console.log("Complete...");
               $scope.status_text = 'Loading complete: ' + data.current + ' of ' + data.total;
               $scope.dataframe = data.result;
-              console.log(data.result)
+              $scope.isRunning = false;
             }
           });
         })();
+      });
+    };
+
+    app.stopMatch = function() {
+      $http({
+        method: 'GET',
+        url: '/match_kill/' + $scope.taskID
+      }).success(function (data) {
+        alert('Stopped!');
       });
     };
 

@@ -29,7 +29,11 @@
     </form>
     {# use ng-cloak and css file to avoid flicker effect #}
     {# source: https://docs.angularjs.org/api/ng/directive/ngCloak #}
-    <div class="ng-cloak">{a status_text a}</div>
+    <div class="ng-cloak" ng-show="isRunning">
+      <div>{a status_text a}</div>
+      <button class="btn btn-default" ng-click="app.stopMatch()">Stop <i class="fa fa-hand-paper-o" aria-hidden="true"></i></button>
+    </div>
+
     {# TODO: Make Save button do something #}
     <div id="save-btn" class="ng-cloak" ng-show="dataframe.length">
       <button class="btn btn-default"  ng-csv="dataframe" filename="test.csv">Save to CSV <i class="fa fa-file-excel-o"></i></button>

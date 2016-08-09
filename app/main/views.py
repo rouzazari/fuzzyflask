@@ -24,6 +24,7 @@ def match_async():
     task = match_task.apply_async(args=[form_data, form_dictionary])
     resp = make_response(jsonify({}), 202)
     resp.headers['Location'] = url_for('main.match_status', task_id=task.id)
+    resp.headers['TaskID'] = task.id
     return resp
 
 
@@ -37,6 +38,10 @@ def match_status(task_id):
             'current': 0,
             'total': 1,
             'status': 'Pending...'
+        }
+    elif task.state == "REVOKED":
+        response = {
+            'state': task.state,
         }
     elif task.state != 'FAILURE':
         response = {
@@ -59,3 +64,10 @@ def match_status(task_id):
             'status': str(task.info)
         }
     return jsonify(response)
+
+
+@main.route('/match_kill/<task_id>')
+def match_kill(task_id):
+    task = match_task.AsyncResult(task_id)
+    task.revoke(terminate=True)
+    return jsonify(dict(state="KILLED"))

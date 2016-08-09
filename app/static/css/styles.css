@@ -21,6 +21,11 @@ table tr:nth-child(even) {
     background-color: #ffffff;
 }
 
+#save-btn {
+    width: 80%;
+    margin: 10px auto;
+    text-align: right;
+}
 
 /* footer placement. css adapted from:
    http://stackoverflow.com/questions/8824831/make-div-stay-at-bottom-of-pages-content-all-the-time-even-when-there-are-scrol/8825714#8825714

@@ -1,4 +1,4 @@
-var app = angular.module("app", []);
+var app = angular.module("app", ['ngSanitize', 'ngCsv']);
 
 app.config(['$interpolateProvider', function ($interpolateProvider) {
   // change the delimiter for AngularJS to avoid conflicts with Jinja2

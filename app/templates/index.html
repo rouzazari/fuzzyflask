@@ -31,7 +31,9 @@
     {# source: https://docs.angularjs.org/api/ng/directive/ngCloak #}
     <div class="ng-cloak">{a status_text a}</div>
     {# TODO: Make Save button do something #}
-    <div class="ng-cloak" ng-show="dataframe.length"><button class="btn btn-default">Save</button></div>
+    <div id="save-btn" class="ng-cloak" ng-show="dataframe.length">
+      <button class="btn btn-default"  ng-csv="dataframe" filename="test.csv">Save to CSV <i class="fa fa-file-excel-o"></i></button>
+    </div>
     <table class="ng-cloak" ng-show="dataframe.length">
       <thead>
         <tr>

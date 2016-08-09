@@ -17,6 +17,7 @@
   "dependencies": {
     "angular": "^1.5.8",
     "angular-sanitize": "^1.5.8",
-    "ng-csv": "^0.3.6"
+    "ng-csv": "^0.3.6",
+    "font-awesome": "fontawesome#^4.6.3"
   }
 }

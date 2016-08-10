@@ -15,7 +15,10 @@ app.controller("AppCtrl", ['$scope', '$http', '$httpParamSerializerJQLike', '$ti
     // source: https://docs.angularjs.org/api/ng/service/$httpParamSerializerJQLike
     var app = this;
     $scope.isRunning = false;
+    $scope.isPackagesCollapsed = true;
     $scope.isFormCollapsed = false;
+
+    $scope.tableHeader = ['Input', 'Match', 'Score', 'Accept'];
 
     app.sendData = function () {
       // save dictionary to variables
@@ -28,7 +31,6 @@ app.controller("AppCtrl", ['$scope', '$http', '$httpParamSerializerJQLike', '$ti
         data: $httpParamSerializerJQLike($scope.form),
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       }).success(function (data, status, headers) {
-        // TODO: Hide input area after clicking, add button show input area again
         $scope.isRunning = true;
         $scope.isFormCollapsed = true;
         var status_url = headers('Location');

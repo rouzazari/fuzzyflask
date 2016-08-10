@@ -1,11 +1,11 @@
 {% extends "bootstrap/base.html" %}
 
-{% block scripts %}
-{{ super() }}
+{% block head %}
+  {{ super() }}
 {% endblock %}
 
-{% block head %}
-{{ super() }}
+{% block styles %}
+  {{ super() }}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='bower_components/font-awesome/css/font-awesome.min.css') }}">
 {% endblock %}
@@ -22,9 +22,34 @@
 {% block content %}
 
   <div id="holder">
-    <div id="header">
-      <h1>Fuzzy Flask <small>a fuzzy string matching example using Flask, Celery, and AngularJS.</small></h1>
+    <div id="header" class="page-header">
+      <h1>Fuzzy Flask <small>fuzzy string matching with Flask, Celery, and AngularJS</small></h1>
+      <button type="button" class="btn btn-link btn-xs col-md-1" ng-click="isPackagesCollapsed = !isPackagesCollapsed">Other packages</button>
+      <div uib-collapse="isPackagesCollapsed" class="col-md-8">
+		    <div class="panel" id="packages">
+          <ul class="list-inline">
+            <li>Python packages include:</li>
+            <li><a href="https://github.com/seatgeek/fuzzywuzzy">Fuzzywuzzy</a></li>
+            <li><a href="https://github.com/mbr/flask-bootstrap">Flask-Bootstrap</a></li>
+            <li><a href="https://github.com/smurfix/flask-script">Flask-Script</a></li>
+            <li><a href="https://github.com/lepture/flask-wtf">Flask-WTF</a></li>
+          </ul>
+          <ul class="list-inline">
+            <li>Javascript packages include:</li>
+            <li><a href="https://github.com/angular-ui/bootstrap">AngularUI-bootstrap</a></li>
+            <li><a href="https://docs.angularjs.org/api/ngAnimate">ngAnimate</a></li>
+            <li><a href="https://github.com/asafdav/ng-csv">ngCsv</a></li>
+            <li><a href="https://docs.angularjs.org/api/ngSanitize">ngSanitize</a></li>
+          </ul>
+          <ul class="list-inline">
+            <li>CSS packages include:</li>
+            <li><a href="https://getbootstrap.com/">Bootstrap</a></li>
+            <li><a href="https://github.com/FortAwesome/Font-Awesome">Font Awesome</a></li>
+          </ul>
+        </div>
+	    </div>
     </div>
+
     <div class="container" id="body">
         {% block page_content %}{% endblock %}
     </div>
@@ -39,12 +64,17 @@
       </div>
     </footer>
   </div>
+
+  <a href="https://github.com/rouzazari/fuzzyflask"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+{% endblock %}
+
+{% block scripts %}
   <script src="{{  url_for('static', filename='bower_components/angular/angular.js') }}"></script>
   <script src="{{  url_for('static', filename='bower_components/angular-sanitize/angular-sanitize.min.js') }}"></script>
   <script src="{{  url_for('static', filename='bower_components/angular-animate/angular-animate.min.js') }}"></script>
   <script src="{{  url_for('static', filename='bower_components/ng-csv/build/ng-csv.js') }}"></script>
   <script src="{{  url_for('static', filename='bower_components/angular-bootstrap/ui-bootstrap.min.js') }}"></script>
   <script src="{{  url_for('static', filename='bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js') }}"></script>
+  {{ super() }}
   <script src="{{  url_for('static', filename='js/app.js') }}"></script>
-  <a href="https://github.com/rouzazari/fuzzyflask"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
 {% endblock %}

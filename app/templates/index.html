@@ -1,10 +1,6 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block scripts %}
-{{ super() }}
-{% endblock %}
-
 {% block title %}Fuzzy Flask{% endblock %}
 
 {% block page_content %}
@@ -35,7 +31,7 @@
     </div>
     {# use ng-cloak and css file to avoid flicker effect #}
     {# source: https://docs.angularjs.org/api/ng/directive/ngCloak #}
-    <div class="ng-cloak col-md-4 col-md-offset-4" ng-show="isRunning">
+    <div class="ng-cloak col-md-4 col-md-offset-4 well" ng-show="isRunning">
       <div class="col-centered">
         <uib-progressbar max="progressTotal" value="progressCurrent"><span style="color:white; white-space:nowrap;">{a progressCurrent a} / {a progressTotal a}</span></uib-progressbar>
       </div>
@@ -44,17 +40,13 @@
       </div>
     </div>
     {# using ng-csv to export file: https://github.com/asafdav/ng-csv #}
-    {# TODO: add column headers #}
     <div id="save-btn" class="ng-cloak" ng-show="dataframe.length">
-      <button class="btn btn-default"  ng-csv="dataframe" filename="test.csv">Save to CSV <i class="fa fa-file-excel-o"></i></button>
+      <button class="btn btn-default"  ng-csv="dataframe" filename="test.csv" csv-header="tableHeader">Save to CSV <i class="fa fa-file-excel-o"></i></button>
     </div>
     <table class="ng-cloak" ng-show="dataframe.length">
       <thead>
         <tr>
-          <th>Input</th>
-          <th>Match</th>
-          <th>Score</th>
-          <th>Accept?</th>
+          <th ng-repeat="h in tableHeader">{a h a}</th>
           <th>Edit</th>
         </tr>
       </thead>
@@ -63,13 +55,10 @@
         <td><span>{a row.data a}</span></td>
         <td ng-switch="row.isEditing">
           <span ng-switch-default>{a row.match a}</span>
-          <div ng-switch-when="true">
-            <select ng-model="row.match" ng-options="o as o for o in dictionary" required class="btn"></select>
-          </div>
+          <select ng-switch-when="true" ng-model="row.match" ng-options="o as o for o in dictionary" required class="form-control"></select>
         </td>
         <td><span>{a row.score a}</span></td>
         <td><input type="checkbox" ng-model="row.selected"></td>
-        {# TODO: research if dropdown works: https://github.com/angular-ui/bootstrap/tree/master/src/dropdown#}
         <td>
           <button class="btn btn-primary btn-sm" ng-click="app.save(row, rowForm)" ng-if="row.isEditing"><span class="glyphicon glyphicon-ok"></span></button>
           <button class="btn btn-default btn-sm" ng-click="row.isEditing = true" ng-if="!row.isEditing"><span class="glyphicon glyphicon-pencil"></span></button>

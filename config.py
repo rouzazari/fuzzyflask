@@ -12,10 +12,12 @@ class Config:
                           port=os.environ.get('CELERY_BROKER_PORT'),
                           vhost=os.environ.get('CELERY_BROKER_VHOST'))
     CELERY_BROKER_URL = 'amqp://{user}:{password}@{server}:{port}/{vhost}'.format(**BROKER_DETAILS)
-    CELERY_RESULT_BACKEND = 'rpc://'
+    # TODO: migrate to redis backend after testing speed vs rabbitmq backend
+    CELERY_RESULT_BACKEND = 'amqp://{user}:{password}@{server}:{port}/{vhost}'.format(**BROKER_DETAILS)
     CELERY_TASK_SERIALIZER = 'json'
     CELERY_RESULT_SERIALIZER = 'json'
     CELERY_ACCEPT_CONTENT = ['json']
+    CELERY_TRACK_STARTED = True
     CELERY_TIMEZONE = 'US/Pacific'
 
     @staticmethod

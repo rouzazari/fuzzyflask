@@ -20,11 +20,10 @@ def match_task(self, dataset, dictionary):
         match, score = dictionary_match(row, dict_split, allow_low_match=True)
         d = dict(data=row, match=match, score=score, selected=score > 90)
         d_all.append(d)
-        if not message or random.random() < REFRESH_THRESHOLD:
-            message = d_all
         self.update_state(state='PROGRESS',
                           meta={'current': int(i+1),
                                 'total': total,
-                                'status': message})
+                                'status': 'working'})
+        #print(d)
     return {'current': total, 'total': total, 'status': 'COMPLETE',
-            'result': message}
+            'result': d_all}

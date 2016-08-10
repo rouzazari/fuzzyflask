@@ -36,7 +36,7 @@ def match_status(task_id):
             'state': task.state,
             'current': 0,
             'total': 1,
-            'status': 'Pending...'
+            'status': 'Results backend: {}'.format(task.backend)
         }
     elif task.state == "REVOKED":
         response = {

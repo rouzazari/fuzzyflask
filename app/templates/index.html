@@ -20,12 +20,12 @@
           <div class="col-md-4 col-md-offset-1">
             {{ wtf.form_field(data_form.dataset, ng_model="form.dataset", placeholder="Paste single-column data here...", rows="10") }}
           </div>
-          <div class="col-md-4 col-md-offset-1">
+          <div class="col-md-4 col-md-offset-2">
             {{ wtf.form_field(data_form.dictionary, ng_model="form.dictionary", placeholder="Paste dictionary here...", rows="10") }}
           </div>
         </div>
       </div>
-      <div class="col-md-11 col-centered">
+      <div class="col-md-12 col-centered">
         {{ wtf.form_field(data_form.submit) }}
       </div>
     </form>
@@ -35,10 +35,13 @@
     </div>
     {# use ng-cloak and css file to avoid flicker effect #}
     {# source: https://docs.angularjs.org/api/ng/directive/ngCloak #}
-    <div class="ng-cloak" ng-show="isRunning">
-      {# TODO: upgrade to progress bar https://github.com/angular-ui/bootstrap/tree/master/src/progressbar #}
-      <div>{a status_text a}</div>
-      <button class="btn btn-default" ng-click="app.stopMatch()">Stop <i class="fa fa-hand-paper-o" aria-hidden="true"></i></button>
+    <div class="ng-cloak col-md-4 col-md-offset-4" ng-show="isRunning">
+      <div class="col-centered">
+        <uib-progressbar max="progressTotal" value="progressCurrent"><span style="color:white; white-space:nowrap;">{a progressCurrent a} / {a progressTotal a}</span></uib-progressbar>
+      </div>
+      <div class="col-centered">
+        <button class="btn btn-default col-centered" ng-click="app.stopMatch()">Stop <i class="fa fa-hand-paper-o" aria-hidden="true"></i></button>
+      </div>
     </div>
     {# using ng-csv to export file: https://github.com/asafdav/ng-csv #}
     {# TODO: add column headers #}

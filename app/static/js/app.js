@@ -45,7 +45,9 @@ app.controller("AppCtrl", ['$scope', '$http', '$httpParamSerializerJQLike', '$ti
               $scope.status_text = 'Process stopped.';
               $scope.isRunning = false;
             } else if (data.state != "SUCCESS") {
-              $scope.status_text = 'Loading... ' + data.current + ' of ' + data.total;
+              //$scope.status_text = 'Loading... ' + data.current + ' of ' + data.total;
+              $scope.progressCurrent = data.current;
+              $scope.progressTotal = data.total;
               //$scope.dataframe = data.status; // disabled mid-processing results
               $timeout(tick, 1000);
             } else {

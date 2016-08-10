@@ -7,7 +7,6 @@ from flask import (jsonify,
 
 from . import main
 from .forms import DataForm
-from .datatools import process_dataset
 from ..tasks import match_task
 
 

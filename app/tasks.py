@@ -1,7 +1,4 @@
 import random
-from io import StringIO
-
-import pandas as pd
 
 from . import celery
 from app.main.datatools import dictionary_match
@@ -21,7 +18,7 @@ def match_task(self, dataset, dictionary):
     # iterate through rows and update task state for polling
     for i, row in enumerate(data_split):
         match, score = dictionary_match(row, dict_split, allow_low_match=True)
-        d = dict(data=row, match=match, score=score, selected=score>90)
+        d = dict(data=row, match=match, score=score, selected=score > 90)
         d_all.append(d)
         if not message or random.random() < REFRESH_THRESHOLD:
             message = d_all

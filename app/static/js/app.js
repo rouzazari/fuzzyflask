@@ -44,6 +44,10 @@ app.controller("AppCtrl", ['$scope', '$http', '$httpParamSerializerJQLike', '$ti
             if (data.state == "REVOKED") {
               $scope.status_text = 'Process stopped.';
               $scope.isRunning = false;
+            } else if (data.state == "PENDING") {
+              // skip scope update but continue polling if status comes back as pending
+              // FIXME: known issue on some servers, status update comes back as PENDING even though process is running
+              $timeout(tick, 1000);
             } else if (data.state != "SUCCESS") {
               //$scope.status_text = 'Loading... ' + data.current + ' of ' + data.total;
               $scope.progressCurrent = data.current;

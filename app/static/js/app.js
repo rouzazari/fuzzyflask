@@ -9,16 +9,34 @@ app.config(['$interpolateProvider', function ($interpolateProvider) {
 }]);
 
 
-app.controller("AppCtrl", ['$scope', '$http', '$httpParamSerializerJQLike', '$timeout',
-  function ($scope, $http, $httpParamSerializerJQLike, $timeout) {
+app.controller("AppCtrl", ['$scope', '$http', '$httpParamSerializerJQLike', '$timeout', '$uibModal',
+  function ($scope, $http, $httpParamSerializerJQLike, $timeout, $uibModal) {
     // use $httpParamSerializerJQLike to make params for POST
     // source: https://docs.angularjs.org/api/ng/service/$httpParamSerializerJQLike
     var app = this;
-    $scope.isRunning = false;
+
+    app.resetForm = function() {
+      $scope.isRunning = false;
+      $scope.isFormCollapsed = false;
+      $scope.dataframe = [];
+    };
+
+
+    app.resetForm();
     $scope.isPackagesCollapsed = true;
-    $scope.isFormCollapsed = false;
+
 
     $scope.tableHeader = ['Input', 'Match', 'Score', 'Accept'];
+
+    app.openErrorModal = function (modalErrorMessage) {
+      $scope.modalErrorMessage = modalErrorMessage;
+      $uibModal.open({
+        templateUrl: 'notificationModal.html',
+        controller: 'ModalInstanceCtrl',
+        size: 'sm',
+        scope: $scope
+      });
+    };
 
     app.sendData = function () {
       // save dictionary to variables
@@ -30,46 +48,70 @@ app.controller("AppCtrl", ['$scope', '$http', '$httpParamSerializerJQLike', '$ti
         url: '/match_async',
         data: $httpParamSerializerJQLike($scope.form),
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-      }).success(function (data, status, headers) {
-        $scope.isRunning = true;
-        $scope.isFormCollapsed = true;
-        var status_url = headers('Location');
-        $scope.taskID = headers('TaskID');
-        $scope.status_text = 'Loading...';
-        $scope.dataframe = []; // reset dataframe
-        console.log(status_url);
-        (function tick() {
-          $scope.data = $http({
-            method: 'GET',
-            url: status_url
-          }).success(function (data) {
-            if (data.state == "REVOKED") {
-              $scope.status_text = 'Process stopped.';
-              $scope.isRunning = false;
-            } else if (data.state == "PENDING") {
-              // skip scope update but continue polling if status comes back as pending
-              $timeout(tick, 2000);
-            } else if (data.state != "SUCCESS") {
-              $scope.progressCurrent = data.current;
-              $scope.progressTotal = data.total;
-              $timeout(tick, 1000);
-            } else {
-              $scope.status_text = 'Loading complete: ' + data.current + ' of ' + data.total;
-              $scope.dataframe = data.result;
-              $scope.isRunning = false;
-            }
-          });
-        })();
+      }).then(
+        function pollStatus(response) {
+          // set request/UI status
+          $scope.isRunning = true;
+          $scope.isFormCollapsed = true;
+
+          // get status url for updates
+          var status_url = response.headers('Location');
+          $scope.taskID = response.headers('TaskID');
+          $scope.dataframe = []; // reset data frame
+
+          // polling for status update (JSON response)
+          (function pollTick() {
+            $http({
+              method: 'GET',
+              url: status_url
+            }).then(
+              function successCallback(response) {
+                if (response.data.state == "REVOKED") {
+                  // if revoked, the process was stopped by user.
+                  app.openErrorModal('Process stopped.');
+                  $scope.isRunning = false;
+
+                } else if (response.data.state == "PENDING") {
+                  // skip scope update but continue polling if status comes back as pending
+                  $timeout(pollTick, 2000);
+
+                } else if (response.data.state != "SUCCESS") {
+                  // the task is still running, continue polling.
+                  $scope.progressCurrent = response.data.current;
+                  $scope.progressTotal = response.data.total;
+                  $timeout(pollTick, 1000);
+
+                } else {
+                  // the task is complete (i.e. response.data.state == "SUCCESS")
+                  $scope.dataframe = response.data.result;
+                  $scope.isRunning = false;
+
+                }
+            },function errorCallback() {
+                app.resetForm();
+                app.openErrorModal('Unable to retrieve results from server.');
+              });
+          })();
+      }, function errorCallback() {
+          // error sending data to server, error out.
+          app.resetForm();
+          app.openErrorModal('Error sending data to server.');
       });
     };
+
 
     app.stopMatch = function() {
       $http({
         method: 'GET',
         url: '/match_kill/' + $scope.taskID
-      }).success(function (data) {
+      }).then(
+        function successCallback() {
 
+      }, function errorCallback() {
+        app.openErrorModal('Unable to stop. Trouble communicating with server.')
       });
+
+      app.resetForm();
     };
 
     // Partially adapted from http://ng-table.com/#/editing/demo-inline
@@ -86,3 +128,14 @@ app.controller("AppCtrl", ['$scope', '$http', '$httpParamSerializerJQLike', '$ti
 
   }]);
 
+// adapted from https://github.com/angular-ui/bootstrap/tree/master/src/modal
+app.controller("ModalInstanceCtrl", ['$scope', '$uibModalInstance',
+  function ($scope, $uibModalInstance, message) {
+    $scope.message = message;
+    $scope.ok = function () {
+      $uibModalInstance.close()
+    };
+    $scope.cancel = function () {
+      $uibModalInstance.dismiss('cancel');
+    };
+  }]);

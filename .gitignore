@@ -12,3 +12,6 @@ app/static/bower_components/
 # ignore server scripts
 runcelery.sh
 webserver.sh
+
+# ignore log folder
+log/
